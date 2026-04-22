@@ -3,17 +3,31 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
-df = pd.read_csv("your_dataset.csv")
+# Load dataset
+df = pd.read_csv("Salary Data.csv")
 
-X = pd.get_dummies(df.iloc[:, :-1])
+# 🔥 Handle missing values (only numeric columns)
+df.fillna(df.select_dtypes(include=['number']).mean(), inplace=True)
+
+# 🔥 Convert categorical columns to numeric
+df = pd.get_dummies(df, drop_first=True)
+
+# Separate input and output
+X = df.iloc[:, :-1]
 y = df.iloc[:, -1]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
+# Train model
 model = LinearRegression()
 model.fit(X_train, y_train)
 
+# Predict
 y_pred = model.predict(X_test)
 
+# Evaluation
 print("MSE:", mean_squared_error(y_test, y_pred))
 print("R2 Score:", r2_score(y_test, y_pred))
