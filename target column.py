@@ -5,3 +5,5 @@ y = df.iloc[:, -1]    # last column = output
 ##if not the last column is the target
 y = df["result"]
 X = df.drop("result", axis=1)
+
+
